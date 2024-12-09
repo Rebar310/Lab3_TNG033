@@ -1,0 +1,5 @@
+C:/Users/rebec/C++ kod/tng033-labs/lab3/lab3/build/CMakeFiles/Exercise1.dir
+C:/Users/rebec/C++ kod/tng033-labs/lab3/lab3/build/CMakeFiles/Exercise2.dir
+C:/Users/rebec/C++ kod/tng033-labs/lab3/lab3/build/CMakeFiles/Exercise3.dir
+C:/Users/rebec/C++ kod/tng033-labs/lab3/lab3/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/rebec/C++ kod/tng033-labs/lab3/lab3/build/CMakeFiles/ZERO_CHECK.dir

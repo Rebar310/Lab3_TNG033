@@ -1,0 +1,8 @@
+
+-- ANAGRAMS --
+dreaming margined midrange  --> 3 words.
+kale lake leak  --> 3 words.
+earls lares laser rales reals seral  --> 6 words.
+kitchen thicken  --> 2 words.
+compiler complier  --> 2 words.
+hist hits shit this  --> 4 words.

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rebec\C++ kod\tng033-labs\lab3\lab3\code\exerc1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rebec\C++ kod\tng033-labs\lab3\lab3\code\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{55D9E0E3-44C8-3BC5-86C7-A5441A9885E9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
