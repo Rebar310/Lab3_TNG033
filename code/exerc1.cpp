@@ -42,7 +42,7 @@ int main() {
     std::map<std::string, int> balances;
      
     // Steg 1: Läs in lån från std::cin
-    std::cout << "Enter list of friend-to-friend loans:";
+    std::cout << "Enter list of friend-to-friend loans: ... ( to finish write z^)\n";
 
     while (std::cin >> payer >> receiver >> price) {
         balances[payer] += price; // Lån från payer (ökar balans)
@@ -59,17 +59,18 @@ int main() {
     
 
     // Steg 3: Skriv ut sammanfattning av lån och skulder
-    std::cout << "Loans (Descending):\n";
+    // Första delen skriver ut de som lånar ut pengar ("lends")
+    std::cout << "Name  Balance:\n";
     for (const auto& entry : sorted_balances) {
         if (entry.second > 0) {
-            std::cout << entry.first << " lends " << entry.second << "\n";
+            std::cout << entry.first << "      " << entry.second << "\n";
         }
     }
 
-    std::cout << "Debts (Ascending):\n";
+    // Här så skrivs summor ut till vilka som är skyldiga ut med minustecken ( "owes")
     for (const auto& entry : sorted_balances) {
         if (entry.second < 0) {
-            std::cout << entry.first << " owes " << -entry.second << "\n";
+            std::cout << entry.first << "      " << entry.second << "\n";
         }
     }
 
@@ -85,7 +86,7 @@ int main() {
     double mean_loan = loans.empty() ? 0 : std::accumulate(loans.begin(), loans.end(), 0) / static_cast<double>(loans.size());
     double mean_debt = debts.empty() ? 0 : std::accumulate(debts.begin(), debts.end(), 0) / static_cast<double>(debts.size());
 
-    std::cout << "Mean loan amount: " << mean_loan << "\n";
+    std::cout << "\nMean loan amount: " << mean_loan << "\n";
     std::cout << "Mean debt amount: " << mean_debt << "\n";
 
     return 0; // endast för att ta bort extra onödig kod
