@@ -18,6 +18,9 @@
 #include <algorithm>
 #include <string>
 
+#include <filesystem>
+
+
 // Funktion för att sortera bokstäverna i ett ord
 std::string get_subject(const std::string& word) {
     std::string subject = word;
@@ -26,6 +29,14 @@ std::string get_subject(const std::string& word) {
 }
 
 int main() {
+    //****************************************************************'
+    // Få aktuell arbetskatalog
+    std::filesystem::path cwd = std::filesystem::current_path();
+
+    // Skriv ut den
+    std::cout << "Current working directory: " << cwd << std::endl;
+    //*****************************************************************
+
 
     // Växla mellan att skriva in filerna uppgift3.txt och uppgift3_kort.txt
     std::ifstream input_file("uppgift3_kort.txt");  // Läs in från filen
