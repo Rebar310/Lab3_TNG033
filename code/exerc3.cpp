@@ -17,11 +17,12 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <set>
 
 #include <filesystem>
 
 
-// Funktion för att sortera bokstäverna i ett ord
+// Funktion för att sortera bokstäverna i ett ord alfabetiskt
 std::string get_subject(const std::string& word) {
     std::string subject = word;
     std::sort(subject.begin(), subject.end());  // Sortera bokstäverna
@@ -29,20 +30,28 @@ std::string get_subject(const std::string& word) {
 }
 
 int main() {
-    //****************************************************************'
-    // Få aktuell arbetskatalog
-    std::filesystem::path cwd = std::filesystem::current_path();
+    
+    // Filsökvägar input
+    // "C:\\Users\\rebec\\C++ kod\\tng033-labs\\lab3\\lab3\\code\\uppgift3_kort.txt"
+    // "C:\\Users\\rebec\\C++ kod\\tng033-labs\\lab3\\lab3\\code\\uppgift3.txt"
 
-    // Skriv ut den
-    std::cout << "Current working directory: " << cwd << std::endl;
-    //*****************************************************************
+    //Filsökvägar output
+    // Resultatet hamnar i build mappen för att inte skriva över "facit-filer"
 
+    // ***********************************************************************''
 
-    // Växla mellan att skriva in filerna uppgift3.txt och uppgift3_kort.txt
-    std::ifstream input_file("uppgift3_kort.txt");  // Läs in från filen
+    // Växla mellan att skriva in filerna
+    std::ifstream input_file("C:\\Users\\rebec\\C++ kod\\tng033-labs\\lab3\\lab3\\code\\uppgift3_kort.txt");  // Läs in från filen
+    if (!input_file.is_open()) {
+        std::cerr << "Error opening file!" << std::endl;
+        return 1;
+    }
 
-    //Växla mellan att skriva in filerna out_uppgift3_kort.txt och out_uppgift3.txt
+    //Växla mellan att skriva in filerna 
+    // out_uppgift3_kort.txt 
+    // out_uppgift3.txt
     std::ofstream output_file("out_uppgift3_kort.txt");  // Skriv till filen
+   
 
     std::map<std::string, std::vector<std::string>> anagram_groups;  // Map för att lagra anagram-grupper
 
@@ -51,6 +60,13 @@ int main() {
     // Läs ord från filen
     while (input_file >> word) {
         std::string subject = get_subject(word);  // Hämta subject för ordet
+
+
+        std::vector<std::string>& wordlist = anagram_groups[subject];
+        if (std::find(wordlist.begin(), wordlist.end(), word) != wordlist.end()) {
+            continue;
+        }
+
         anagram_groups[subject].push_back(word);  // Lägg till ordet i rätt anagram-grupp
     }
 
@@ -58,15 +74,21 @@ int main() {
     for (const auto& pair : anagram_groups) {
         if (pair.second.size() > 1) {  // Om gruppen har två eller fler ord
             output_file << "Anagram group: ";
-            for (const auto& anagram : pair.second) {
+
+            // Sortera anagrammen alfabetiskt innan de skrivs ut
+            std::vector<std::string> sorted_anagrams = pair.second;
+            std::sort(sorted_anagrams.begin(), sorted_anagrams.end());
+
+            for (const auto& anagram : sorted_anagrams) {
+
                 output_file << anagram << " ";
             }
-            output_file << "(Count: " << pair.second.size() << ")\n";
+            output_file << " ---> (" << pair.second.size() << " words" << ")\n";
         }
     }
 
 
-    std::cout << "Anagram groups have been written to out_uppgift3.txt\n";
+    std::cout << "Anagram groups have been written to choosen file\n";
 
     return 0;
 
