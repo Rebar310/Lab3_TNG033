@@ -79,7 +79,7 @@ int main() {
 	double total_distance = std::accumulate(distances.begin(), distances.end(), 0.0);
 
 	// Skriv ut det totala avståndet
-	std::cout << "Total distance: " << total_distance << "\n";
+	std::cout << "\n Distance travelled = " << total_distance << "\n";
 
 	return 0;
 

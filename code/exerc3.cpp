@@ -19,7 +19,6 @@
 #include <string>
 #include <set>
 
-#include <filesystem>
 
 
 // Funktion för att sortera bokstäverna i ett ord alfabetiskt
