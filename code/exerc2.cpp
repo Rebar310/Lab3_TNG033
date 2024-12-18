@@ -16,6 +16,10 @@
 #include <algorithm>      // For transform function
 #include <sstream>        // For stringstream to parse points
 
+// ************************   Disclaimer   ****************************************
+// For this excercise there were hints of using std::adjacent_difference and std::pair to represent the points
+// This did not work so instead the point is now a struct and we use std::tranform insted of adjacent
+
 
 // Define a struct to represent a point in 2D space
 struct Point {
