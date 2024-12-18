@@ -8,24 +8,28 @@
  // som fås ut mellan varje punkt.
 
 #include <iostream>
-#include <fstream> // för att kunna läsa från filer
+#include <fstream>
 #include <vector>
 #include <cmath>
 #include <numeric>
 #include <iterator>
 #include <algorithm>
-#include <string>
 #include <sstream>
 
-#include <filesystem>
 
 
+struct Point {
+	int x, y;
+};
 
-// Beräknar avståndet mellan två punkter (x1, y1) och (x2, y2)
-double calculate_distance(const std::pair<int, int>& point1, const std::pair<int, int>& point2) {
-	int dx = point2.first - point1.first;
-	int dy = point2.second - point1.second;
-	return std::sqrt(dx * dx + dy * dy);  // Pythagoras sats
+std::istream& operator>>(std::istream& is, Point& p) {
+	std::string line;
+	if (std::getline(is, line)) {
+		std::stringstream ss(line);
+		char comma;
+		ss >> p.x >> comma >> p.y;
+	}
+	return is;
 }
 
 
@@ -39,40 +43,24 @@ int main() {
 		return 1;
 	}
 
-	std::vector<std::pair<int, int>> points;  // Vektor för att lagra punkterna (x, y)
-	std::string line;
+	// Läs in punkterna från filen med istream_iterator
+	std::vector<Point> points((std::istream_iterator<Point>(file)), std::istream_iterator<Point>());
 
-	while (file >> line) {
-		// Extrahera x och y-koordinater från varje rad
-		std::stringstream ss(line);
-		int x, y;
-		char comma; // För att hantera kommatecknet mellan x och y
-		ss >> x >> comma >> y;
-		points.push_back({ x, y });
-	}
-
-	// Visa alla lästa punkter
-	std::cout << "Points: \n";
-	// Måste kolla om jag får använda auto
-	for (const auto& point : points) {
-		std::cout << "(" << point.first << ", " << point.second << ")\n";
-	}
-
-	// Beräkna avståndet mellan varje par av på varandra följande punkter
-	std::vector<double> distances;
-
-	//Använd adjacent_difference för att beräkna avstånd mellan på varandra följande punkter
-	//std::adjacent_difference(points.begin(), points.end(), std::back_inserter(distances),
-	//	[](const std::pair<int, int>& a, const std::pair<int, int>& b) {
-	//		return calculate_distance(a, b);  // Använda calculate_distance för att beräkna avstånd
-	//	});
-
-
-	// Beräkna avståndet mellan på varandra följande punkter manuellt    (lösning utan adjacent_difference)
-	for (size_t i = 1; i < points.size(); ++i) {
-		double dist = calculate_distance(points[i - 1], points[i]);
-		distances.push_back(dist);
-	}
+	// Skriv ut punkterna med std::transform och std::ostream_iterator
+	std::cout << "Points:\n";
+	std::transform(points.begin(), points.end(), std::ostream_iterator<std::string>(std::cout, "\n"),
+		[](const Point& p) {
+			return "(" + std::to_string(p.x) + ", " + std::to_string(p.y) + ")";
+		});
+	
+	// Beräkna avstånd mellan på varandra följande punkter
+	std::vector<double> distances(points.size() - 1);
+	std::transform(points.begin(), points.end() - 1, points.begin() + 1, distances.begin(),
+		[](const Point& a, const Point& b) {
+			int dx = b.x - a.x;
+			int dy = b.y - a.y;
+			return std::sqrt(dx * dx + dy * dy);
+		});
 
 
 	// Steg 3: Summera avstånden för att få det totala avståndet
