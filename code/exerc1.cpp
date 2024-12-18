@@ -13,6 +13,7 @@
 #include <numeric>
 #include <cmath>
 #include <iterator>
+#include <string>
 
 // <Payer name> <Receiver name> <price> , ska fås via std::cin
 // Initialer på den som är skyldig och den 
@@ -57,35 +58,40 @@ int main() {
         return a.second > b.second;  // Jämför balanser
     });
     
+    // Använd std::partition_copy för att separera lån och skulder
+    std::vector<std::pair<std::string, int>> loans, debts;
+    std::partition_copy(sorted_balances.begin(), sorted_balances.end(),
+        std::back_inserter(loans), std::back_inserter(debts),
+        [](const auto& entry) { return entry.second > 0; });
 
-    // Steg 3: Skriv ut sammanfattning av lån och skulder
-    // Första delen skriver ut de som lånar ut pengar ("lends")
+    // Skriv ut lån och skulder med std::transform och std::ostream_iterator
     std::cout << "Name  Balance:\n";
-    for (const auto& entry : sorted_balances) {
-        if (entry.second > 0) {
-            std::cout << entry.first << "      " << entry.second << "\n";
-        }
-    }
+    std::transform(loans.begin(), loans.end(),
+        std::ostream_iterator<std::string>(std::cout, "\n"),
+        [](const auto& entry) {
+            return entry.first + "      " + std::to_string(entry.second);
+        });
 
-    // Här så skrivs summor ut till vilka som är skyldiga ut med minustecken ( "owes")
-    for (const auto& entry : sorted_balances) {
-        if (entry.second < 0) {
-            std::cout << entry.first << "      " << entry.second << "\n";
-        }
-    }
+    std::transform(debts.begin(), debts.end(),
+        std::ostream_iterator<std::string>(std::cout, "\n"),
+        [](const auto& entry) {
+            return entry.first + "      " + std::to_string(entry.second);
+        });
 
-    // Steg 4: Beräkna och skriv ut medelvärde för lån och skulder
-    std::vector<int> loans;
-    std::vector<int> debts;
+    // Separera och summera lån och skulder för att beräkna medelvärden
+    std::vector<int> loan_amounts, debt_amounts;
+    std::transform(loans.begin(), loans.end(), std::back_inserter(loan_amounts),
+        [](const auto& entry) { return entry.second; });
+    std::transform(debts.begin(), debts.end(), std::back_inserter(debt_amounts),
+        [](const auto& entry) { return -entry.second; });
 
-    for (const auto& entry : sorted_balances) {
-        if (entry.second > 0) loans.push_back(entry.second);
-        else debts.push_back(-entry.second);
-    }
+    // Medelvärdesberäkning
+    double mean_loan = loan_amounts.empty() ? 0.0 :
+        std::accumulate(loan_amounts.begin(), loan_amounts.end(), 0.0) / loan_amounts.size();
+    double mean_debt = debt_amounts.empty() ? 0.0 :
+        std::accumulate(debt_amounts.begin(), debt_amounts.end(), 0.0) / debt_amounts.size();
 
-    double mean_loan = loans.empty() ? 0 : std::accumulate(loans.begin(), loans.end(), 0) / static_cast<double>(loans.size());
-    double mean_debt = debts.empty() ? 0 : std::accumulate(debts.begin(), debts.end(), 0) / static_cast<double>(debts.size());
-
+    
     std::cout << "\nMean loan amount: " << mean_loan << "\n";
     std::cout << "Mean debt amount: " << mean_debt << "\n";
 
